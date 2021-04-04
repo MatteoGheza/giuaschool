@@ -16,18 +16,18 @@ RUN \
 # Update APT source list
   apt-get -qq update && \
 # Set locale
-  apt-get -yqq install locales && \
+  apt-get -yqq --no-install-recommends install locales && \
   sed -i -e "s/# $LANG/$LANG/" /etc/locale.gen && \
   echo "LANG=$LANG">/etc/default/locale && \
   dpkg-reconfigure --frontend=noninteractive locales && \
   update-locale LANG=$LANG && \
 # Install dev tools
-  apt-get -yqq install \
+  apt-get -yqq --no-install-recommends install \
   debconf-utils apt-utils lsb-release \
   curl wget unzip rsync git \
   apt-transport-https openssh-client ca-certificates && \
 # Install Apache, MariaDB, Composer
-  apt-get install -yqq \
+  apt-get install -yqq --no-install-recommends \
   apache2=2.4.* \
   mariadb-common=1:10.3.* mariadb-server=1:10.3.* mariadb-client=1:10.3.* \
   composer=1.* && \
@@ -35,8 +35,10 @@ RUN \
   wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg && \
   echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list && \
   apt-get -qq update && \
-  apt-get -yqq install \
+  apt-get -yqq --no-install-recommends install \
   php7.4 php7.4-curl php7.4-gd php7.4-intl php7.4-mbstring php7.4-mysql php7.4-readline php7.4-xml php7.4-zip && \
+  apt-get clean && \
+  rm -rf /var/lib/apt/lists/* && \
 # Install Symfony
   composer -q install --no-progress --prefer-dist --no-suggest --optimize-autoloader --no-plugins --no-scripts
 
