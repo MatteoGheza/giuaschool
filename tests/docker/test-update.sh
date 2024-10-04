@@ -25,5 +25,8 @@ fi
 rm -r var/cache/*
 rm -r tests/temp/*
 
+# Make sure test sessions directory exists
+mkdir -p var/sessions/test
+
 # smoke test
 su -s /bin/bash -p -c "php -d memory_limit=-1 vendor/bin/behat tests/features/test-update-3.feature --stop-on-failure -f progress" www-data
